@@ -13,7 +13,7 @@ This project uses an LSTM (Long Short-Term Memory) neural network to predict Bit
 - Plots actual vs. predicted Bitcoin prices
 
 ## Installation
-Ensure you have Python installed, then install dependencies using:
+Ensure you have Python up to v3.11 installed, then install dependencies using:
 ```bash
 pip3 install -r requirements.txt
 ```
