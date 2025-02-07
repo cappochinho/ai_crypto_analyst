@@ -7,11 +7,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
+from datetime import date
+import os
 
-btc_usd = yf.download("BTC-USD", start='2020-03-18', end='2023-03-18', interval='1d')
+token_name = os.getenv("TOKEN_NAME")
+token_pair = os.getenv("TOKEN_PAIR")
+token_data = yf.download(token_pair, start='2022-01-01', end=date.today(), interval='1d')
 
 scaler = MinMaxScaler(feature_range=(0, 1))
-data_scaled = scaler.fit_transform(btc_usd[['Close']])
+data_scaled = scaler.fit_transform(token_data[['Close']])
 
 lookback = 30
 def create_sequences(data, lookback):
@@ -38,10 +42,10 @@ predictions = model.predict(X_test)
 predictions = scaler.inverse_transform(predictions)
 
 plt.figure(figsize=(12, 6))
-plt.plot(btc_usd.index[-len(y_test):], scaler.inverse_transform(y_test.reshape(-1, 1)), label='Actual Price')
-plt.plot(btc_usd.index[-len(y_test):], predictions, label='Predicted Price')
+plt.plot(token_data.index[-len(y_test):], scaler.inverse_transform(y_test.reshape(-1, 1)), label='Actual Price')
+plt.plot(token_data.index[-len(y_test):], predictions, label='Predicted Price')
 plt.legend()
-plt.title("Bitcoin Price Prediction using LSTM")
+plt.title(f"{token_name} Price Prediction using LSTM")
 plt.xlabel("Date")
 plt.ylabel("Price (USD)")
 plt.show()
